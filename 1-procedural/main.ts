@@ -2,6 +2,7 @@
 
 let display: HTMLElement | null = null;
 let expressionElement: HTMLElement | null = null;
+let historyElement: HTMLElement | null = null;
 let currentNumber: string = "0";
 let firstOperand: number | null = null;
 let operator: string | null = null;
@@ -49,13 +50,15 @@ function performOperation(isOperator: boolean = false) {
 
   const secondOperand = parseFloat(currentNumber);
   let result: number;
-
+  let historyItemClass: string;
   switch (operator) {
     case "+":
       result = firstOperand + secondOperand;
+      historyItemClass = "add";
       break;
     case "-":
       result = firstOperand - secondOperand;
+      historyItemClass = "subtract";
       break;
     case "/":
       if (secondOperand === 0) {
@@ -64,12 +67,21 @@ function performOperation(isOperator: boolean = false) {
         return;
       }
       result = firstOperand / secondOperand;
+      historyItemClass = "divide";
       break;
     case "*":
       result = firstOperand * secondOperand;
+      historyItemClass = "multiply";
       break;
     default:
       return;
+  }
+
+  if (historyElement) {
+    const historyItem = document.createElement("div");
+    historyItem.className = `history-item ${historyItemClass}`;
+    historyItem.textContent = `${firstOperand} ${operator} ${secondOperand} = ${result}`;
+    historyElement.appendChild(historyItem);
   }
 
   if (!isOperator) {
@@ -101,6 +113,7 @@ function setOperator(op: string) {
 function initCalculator() {
   display = document.getElementById("display");
   expressionElement = document.getElementById("expression");
+  historyElement = document.getElementById("history");
   clear();
 
   // Add event listeners for numeric buttons
@@ -120,7 +133,9 @@ function initCalculator() {
   document
     .getElementById("divideButton")
     ?.addEventListener("click", () => setOperator("/"));
-
+  document
+    .getElementById("multiplyButton")
+    ?.addEventListener("click", () => setOperator("*"));
   // Add event listeners for special buttons
   document.getElementById("clearButton")?.addEventListener("click", clear);
   document
