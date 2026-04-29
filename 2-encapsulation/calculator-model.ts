@@ -15,6 +15,7 @@ export class CalculatorModel {
   public addDigitToDisplay(digitText: string) {
     if (this.result !== null) {
       this.result = null;
+      this.leftOperand = null;
       this.expression.clear();
     }
     if (this.operator) {
@@ -35,9 +36,18 @@ export class CalculatorModel {
     this.expression.clear();
   }
 
-  public addOperator(operator: string) {
+  public addOperator(newOperator: string) {
+    const { leftOperand, rightOperand, operator } = this;
+    if (this.result !== null) {
+      this.result = null;
+    }
+    if (leftOperand !== null && rightOperand !== null && operator) {
+      this.calculate();
+      this.addOperator(newOperator);
+    }
+
     if (this.leftOperand) {
-      this.operator = operator;
+      this.operator = newOperator;
       this.expression.setText(this.leftOperand, this.operator);
       this.display.clear();
     }
@@ -65,11 +75,10 @@ export class CalculatorModel {
           break;
         default:
           console.warn("Неизвестный оператор:", operator);
-          undefined;
       }
-      this.expression.setText(this.result as number);
+      this.result && this.expression.setText(this.result);
       this.display.clear();
-      this.leftOperand = null;
+      this.leftOperand = this.result;
       this.rightOperand = null;
       this.operator = null;
     }
