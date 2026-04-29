@@ -16,6 +16,11 @@ export class CalculatorButton {
     this.root.textContent = text;
   }
 
+  public onClick(cb: () => void): this {
+    this.root.addEventListener("click", cb);
+    return this;
+  }
+
   private createRoot(text: string) {
     const root = document.createElement("button");
     root.classList.add("calculator_button");

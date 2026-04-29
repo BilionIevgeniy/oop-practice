@@ -1,6 +1,7 @@
 import { CalculatorButton } from "./calculator-button.ts";
 import { CalculatorDisplay } from "./calculator-display.ts";
 import { CalculatorExpression } from "./calculator-expression.ts";
+import { CalculatorModel } from "./calculator-model.ts";
 import { injectCss } from "./utils.ts";
 
 class Calculator {
@@ -8,26 +9,47 @@ class Calculator {
   private display: CalculatorDisplay;
   private expression: CalculatorExpression;
   private buttons: CalculatorButton[];
+  private model: CalculatorModel;
 
   constructor() {
     this.display = new CalculatorDisplay();
     this.expression = new CalculatorExpression();
-
+    this.model = new CalculatorModel(this.display);
     this.buttons = [
-      new CalculatorButton("7"),
-      new CalculatorButton("8"),
-      new CalculatorButton("9"),
+      new CalculatorButton("7").onClick(() =>
+        this.model.addDigitToDisplay("7"),
+      ),
+      new CalculatorButton("8").onClick(() =>
+        this.model.addDigitToDisplay("8"),
+      ),
+      new CalculatorButton("9").onClick(() =>
+        this.model.addDigitToDisplay("9"),
+      ),
       new CalculatorButton("/"),
-      new CalculatorButton("4"),
-      new CalculatorButton("5"),
-      new CalculatorButton("6"),
+      new CalculatorButton("4").onClick(() =>
+        this.model.addDigitToDisplay("4"),
+      ),
+      new CalculatorButton("5").onClick(() =>
+        this.model.addDigitToDisplay("5"),
+      ),
+      new CalculatorButton("6").onClick(() =>
+        this.model.addDigitToDisplay("6"),
+      ),
       new CalculatorButton("-"),
-      new CalculatorButton("1"),
-      new CalculatorButton("2"),
-      new CalculatorButton("3"),
+      new CalculatorButton("1").onClick(() =>
+        this.model.addDigitToDisplay("1"),
+      ),
+      new CalculatorButton("2").onClick(() =>
+        this.model.addDigitToDisplay("2"),
+      ),
+      new CalculatorButton("3").onClick(() =>
+        this.model.addDigitToDisplay("3"),
+      ),
       new CalculatorButton("+"),
-      new CalculatorButton("0"),
-      new CalculatorButton("C"),
+      new CalculatorButton("0").onClick(() =>
+        this.model.addDigitToDisplay("0"),
+      ),
+      new CalculatorButton("C").onClick(() => this.model.clearDisplay()),
       new CalculatorButton("="),
       new CalculatorButton("*"),
     ];
