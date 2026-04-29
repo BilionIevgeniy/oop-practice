@@ -12,8 +12,12 @@ export class CalculatorExpression {
     container.appendChild(this.root);
   }
 
-  public setText(text: string) {
-    this.root.textContent = text;
+  public setText(num: number, operator?: string) {
+    if (!operator) {
+      this.root.textContent = `${num}`;
+      return;
+    }
+    this.root.textContent = `${num} ${operator}`;
   }
 
   public clear() {
@@ -22,7 +26,7 @@ export class CalculatorExpression {
 
   private createRoot() {
     const root = document.createElement("div");
-    root.classList.add("calculator_display");
+    root.classList.add("calculator_expression");
     root.textContent = "";
     return root;
   }

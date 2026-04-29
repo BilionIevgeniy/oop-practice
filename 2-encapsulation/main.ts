@@ -14,7 +14,7 @@ class Calculator {
   constructor() {
     this.display = new CalculatorDisplay();
     this.expression = new CalculatorExpression();
-    this.model = new CalculatorModel(this.display);
+    this.model = new CalculatorModel(this.display, this.expression);
     this.buttons = [
       new CalculatorButton("7").onClick(() =>
         this.model.addDigitToDisplay("7"),
@@ -25,7 +25,9 @@ class Calculator {
       new CalculatorButton("9").onClick(() =>
         this.model.addDigitToDisplay("9"),
       ),
-      new CalculatorButton("/"),
+      new CalculatorButton("/").onClick(() => {
+        this.model.addOperator("/");
+      }),
       new CalculatorButton("4").onClick(() =>
         this.model.addDigitToDisplay("4"),
       ),
@@ -35,7 +37,9 @@ class Calculator {
       new CalculatorButton("6").onClick(() =>
         this.model.addDigitToDisplay("6"),
       ),
-      new CalculatorButton("-"),
+      new CalculatorButton("-").onClick(() => {
+        this.model.addOperator("-");
+      }),
       new CalculatorButton("1").onClick(() =>
         this.model.addDigitToDisplay("1"),
       ),
@@ -45,13 +49,17 @@ class Calculator {
       new CalculatorButton("3").onClick(() =>
         this.model.addDigitToDisplay("3"),
       ),
-      new CalculatorButton("+"),
+      new CalculatorButton("+").onClick(() => {
+        this.model.addOperator("+");
+      }),
       new CalculatorButton("0").onClick(() =>
         this.model.addDigitToDisplay("0"),
       ),
       new CalculatorButton("C").onClick(() => this.model.clearDisplay()),
-      new CalculatorButton("="),
-      new CalculatorButton("*"),
+      new CalculatorButton("=").onClick(() => this.model.calculate()),
+      new CalculatorButton("*").onClick(() => {
+        this.model.addOperator("*");
+      }),
     ];
     this.root = this.createRoot();
     this.initCss();
@@ -67,12 +75,12 @@ class Calculator {
     this.expression.renderTo(root);
     this.display.renderTo(root);
 
-    const buttonsContainer = document.createElement("div");
-    buttonsContainer.classList.add("calculator_buttons");
-    root.appendChild(buttonsContainer);
+    const buttonsWrapper = document.createElement("div");
+    buttonsWrapper.classList.add("calculator_buttons");
+    root.appendChild(buttonsWrapper);
 
     this.buttons.forEach((button) => {
-      button.renderTo(buttonsContainer);
+      button.renderTo(buttonsWrapper);
     });
     return root;
   }
