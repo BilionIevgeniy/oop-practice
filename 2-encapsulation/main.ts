@@ -1,6 +1,7 @@
 import { CalculatorButton } from "./calculator-button.ts";
 import { CalculatorDisplay } from "./calculator-display.ts";
 import { CalculatorExpression } from "./calculator-expression.ts";
+import { CalculatorHistory } from "./calculator-history.ts";
 import { CalculatorModel } from "./calculator-model.ts";
 import { injectCss } from "./utils.ts";
 
@@ -10,11 +11,17 @@ class Calculator {
   private expression: CalculatorExpression;
   private buttons: CalculatorButton[];
   private model: CalculatorModel;
+  private history: CalculatorHistory;
 
   constructor() {
     this.display = new CalculatorDisplay();
     this.expression = new CalculatorExpression();
-    this.model = new CalculatorModel(this.display, this.expression);
+    this.history = new CalculatorHistory();
+    this.model = new CalculatorModel(
+      this.display,
+      this.expression,
+      this.history,
+    );
     this.buttons = [
       new CalculatorButton("7").onClick(() =>
         this.model.addDigitToDisplay("7"),
@@ -74,7 +81,7 @@ class Calculator {
     root.classList.add("calculator");
     this.expression.renderTo(root);
     this.display.renderTo(root);
-
+    this.history.renderTo(root);
     const buttonsWrapper = document.createElement("div");
     buttonsWrapper.classList.add("calculator_buttons");
     root.appendChild(buttonsWrapper);

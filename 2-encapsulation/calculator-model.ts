@@ -1,5 +1,6 @@
 import { CalculatorDisplay } from "./calculator-display.ts";
 import { CalculatorExpression } from "./calculator-expression.ts";
+import { CalculatorHistory } from "./calculator-history.ts";
 
 export class CalculatorModel {
   private leftOperand: number | null = null;
@@ -10,6 +11,7 @@ export class CalculatorModel {
   constructor(
     private display: CalculatorDisplay,
     private expression: CalculatorExpression,
+    private history: CalculatorHistory,
   ) {}
 
   public addDigitToDisplay(digitText: string) {
@@ -56,27 +58,30 @@ export class CalculatorModel {
   public calculate() {
     const { leftOperand, rightOperand, operator } = this;
     if (leftOperand !== null && rightOperand !== null && operator) {
+      let result: number = 0;
       switch (operator) {
         case "+":
-          this.result = leftOperand + rightOperand;
+          result = leftOperand + rightOperand;
           break;
         case "-":
-          this.result = leftOperand - rightOperand;
+          result = leftOperand - rightOperand;
           break;
         case "*":
-          this.result = leftOperand * rightOperand;
+          result = leftOperand * rightOperand;
           break;
         case "/":
           if (rightOperand === 0) {
-            alert("Ошибка: деление на ноль");
+            alert("Warning: cant devide by 0");
             return;
           }
-          this.result = leftOperand / rightOperand;
+          result = leftOperand / rightOperand;
           break;
         default:
-          console.warn("Неизвестный оператор:", operator);
+          console.warn("Unknown operator:", operator);
       }
-      this.result && this.expression.setText(this.result);
+      this.result = result;
+      this.expression.setText(this.result);
+      this.history.addHistory(leftOperand, operator, rightOperand, result);
       this.display.clear();
       this.leftOperand = this.result;
       this.rightOperand = null;
